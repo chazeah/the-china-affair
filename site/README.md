@@ -10,20 +10,16 @@ and one small script. Upload the contents of this folder and it works.
 
 **Any static host.** Drop this folder in. `index.html` is the entry point.
 
-**GitHub Pages.** Push the contents to a repository, then in Settings → Pages
-choose the branch and `/ (root)`. Rename the folder to `docs/` and pick
-`/docs` instead if you'd rather keep the site beside other files.
+**GitHub Pages.** This repository's Pages workflow publishes this folder on
+every push to `main`. In Settings → Pages, choose **GitHub Actions** as the
+source.
 
 **Netlify, Cloudflare Pages, Vercel.** Drag the folder onto the dashboard, or
 point the project at it with no build command and this folder as the publish
 directory.
 
-Two small things to change before you go live:
-
-- `robots.txt` and `sitemap.xml` both contain `https://example.com`. Replace it
-  with your domain, or delete both files — the site works without them.
-- The footer of the front page invites corrections but gives no address. Add
-  one if you want to hear from readers.
+The footer of the front page invites corrections but gives no address. Add one
+if you want to hear from readers.
 
 ## Structure
 

@@ -2,5 +2,4 @@
 User-agent: *
 Allow: /
 
-# Replace example.com with your domain before publishing.
-Sitemap: https://example.com/sitemap.xml
+Sitemap: https://chazeah.github.io/the-china-affair/sitemap.xml
