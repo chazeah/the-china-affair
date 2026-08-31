@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Verification &amp;middot; The China Affair</title>
+  <meta name="description" content="The risk in work like this is not a visibly garbled word but a line that vanishes without trace. Here is how the result was checked for that.">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="sheet sheet--wide">
+  <header class="runhead">
+    <a href="../index.html">Walton &middot; The China Affair</a>
+    <span class="runhead__rev">Verification</span>
+  </header>
+  <main id="main">
+    <p class="label">The archive</p>
+    <h1 class="title" style="font-size:clamp(1.3rem,4.4vw,2rem)">Verification</h1>
+    <p class="lede">The risk in work like this is not a visibly garbled word but a line that vanishes without trace. Here is how the result was checked for that.</p>
+    <div class="report">
+
+<p>Two independent checks were run on the finished document: one for dropped content, one for residual OCR error. Both are reproducible — <code>pipeline/5_verify.py</code> runs the first.</p>
+<hr />
+<h2 id="1-coverage--was-anything-lost">1. Coverage — was anything lost?</h2>
+<p>The risk in a pipeline like this is not a garbled word, which is visible, but a silently dropped line, paragraph or page, which is not. Header-stripping, footnote-splitting, noise-filtering and paragraph-merging each <em>remove</em> or <em>move</em> text, and a bug in any of them could lose a passage without leaving a trace in the output.</p>
+<p>So the check works backwards from the source. For every scanned page, four six-word windows were drawn from lines the OCR read confidently, and each was searched for in the finished manuscript. A missing window means text that was on the page is not in the document.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td>Pages probed</td>
+<td>264 of 267 (front matter and blank pages excluded)</td>
+</tr>
+<tr class="even">
+<td>Probes</td>
+<td>1051</td>
+</tr>
+<tr class="odd">
+<td>Pages with every probe found</td>
+<td><strong>254</strong></td>
+</tr>
+<tr class="even">
+<td>Pages with a missing probe</td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+<p>All nine remaining pages are accounted for, and in every case the probe fails because the <em>source</em> text was deliberately changed — the check is comparing against the uncorrected OCR reading, which no longer appears:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Page</th>
+<th>Why the probe misses</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>18</td>
+<td>probe contains <code>dispostions</code>, corrected to <em>dispositions</em></td>
+</tr>
+<tr class="even">
+<td>25</td>
+<td>probe contains <code>Wurttenderg</code>, corrected to <em>Wurttemberg</em></td>
+</tr>
+<tr class="odd">
+<td>151</td>
+<td>page re-transcribed by hand; probe contains OCR <code>November l th</code> for <em>November 16th</em></td>
+</tr>
+<tr class="even">
+<td>154</td>
+<td>page re-transcribed by hand; probe contains OCR <code>divices</code> for <em>divides</em></td>
+</tr>
+<tr class="odd">
+<td>156</td>
+<td>page re-transcribed by hand; probe contains OCR <code>lest</code> for <em>lost</em></td>
+</tr>
+<tr class="even">
+<td>195</td>
+<td>probe spans the author's <code>*</code>, now a numbered footnote reference</td>
+</tr>
+<tr class="odd">
+<td>227</td>
+<td>probe contains <code>llth</code>, corrected to <em>11th</em></td>
+</tr>
+<tr class="even">
+<td>231</td>
+<td>probe contains <code>tne</code>, corrected to <em>the</em></td>
+</tr>
+<tr class="odd">
+<td>235</td>
+<td>probe contains <code>nad</code>, corrected to <em>had</em></td>
+</tr>
+<tr class="even">
+<td>244</td>
+<td>probe spans the author's <code>*</code>, now a numbered footnote reference</td>
+</tr>
+</tbody>
+</table>
+<p><strong>No dropped content was found.</strong> Two earlier runs of this same check did surface real bugs, which is what it is for: a footnote separator rule that overlapped the first note line (so notes leaked into the body on page 19), and paragraphs on footnoted pages failing to carry across the page break. Both were fixed and the check re-run.</p>
+<hr />
+<h2 id="2-residual-error-rate">2. Residual error rate</h2>
+<p>Every word in the finished text was checked against a 160,000-word dictionary, ignoring accents and closed-up compounds.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td>Words in document</td>
+<td>67,237</td>
+</tr>
+<tr class="even">
+<td>Not in dictionary</td>
+<td>306 (0.46%)</td>
+</tr>
+<tr class="odd">
+<td>Distinct forms</td>
+<td>244</td>
+</tr>
+</tbody>
+</table>
+<p>Most of that figure is not error. It is the author's own spellings and compound nouns, German and French phrases, and the manuscript's several hundred proper nouns — people, airships, and place names across East Africa, Anatolia and the North Sea. See <code>preserved-spellings.md</code>.</p>
+<p>The 20 most frequent unrecognised forms, for reference:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Form</th>
+<th>Times</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>von</code></td>
+<td>23</td>
+</tr>
+<tr class="even">
+<td><code>occured</code></td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td><code>airforce</code></td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td><code>rudderman</code></td>
+<td>5</td>
+</tr>
+<tr class="odd">
+<td><code>askaris</code></td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td><code>longitudenal</code></td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td><code>anonimity</code></td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td><code>darkeness</code></td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td><code>embarassment</code></td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td><code>machinegun</code></td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td><code>socalled</code></td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td><code>der</code></td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td><code>dilemna</code></td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td><code>disasterous</code></td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td><code>duraluminum</code></td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td><code>elan</code></td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td><code>flieg</code></td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td><code>lle</code></td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td><code>reconaissance</code></td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td><code>vertretbare</code></td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-structural-checks">3. Structural checks</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Check</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Chapters matched against the table of contents</td>
+<td>15 / 15</td>
+</tr>
+<tr class="even">
+<td>Chapter order</td>
+<td>matches the table of contents</td>
+</tr>
+<tr class="odd">
+<td>Footnotes carried through</td>
+<td>31 / 31</td>
+</tr>
+<tr class="even">
+<td>Footnotes anchored at the author's <code>*</code></td>
+<td>29 / 31 (2 placed at paragraph end, where the asterisk itself was lost to the scan)</td>
+</tr>
+<tr class="odd">
+<td>Paragraphs not ending in terminal punctuation</td>
+<td>8 of 522 — every one ends in a colon introducing a quotation, or in a footnote marker</td>
+</tr>
+<tr class="even">
+<td>Paragraphs beginning lower-case</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>Running headers leaked into body text</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>Dangling line-break hyphens</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>Word-level XSD validation of the .docx</td>
+<td>passed</td>
+</tr>
+</tbody>
+</table>
+<p>The last two counts are worth dwelling on, because they are how three real bugs were caught. A paragraph that stops mid-sentence, or that starts in lower case, almost always means a page-break merge that failed. Chasing the last few surfaced: a noise filter discarding the genuine one-word line "overcast." because it was faint and short; block quotations whose line-break hyphens were never rejoined, because quotes kept their raw lines while body text did not; and a full stop on page 166 that the scanner had read as a comma. None of the three would have been visible just by reading the output.</p>
+<h2 id="4-visual-spot-checks">4. Visual spot-checks</h2>
+<p>Rendered pages were compared against the corresponding scans by eye: the title page, table of contents, the Prologue opening, a footnoted page, a block-quotation page, the German verse, and Chapter IX (the hand-transcribed section). Crops of the pages that settled a specific question are in <code>evidence/</code>.</p>
+
+    </div>
+    <nav class="chapnav"><a href="preserved-spellings.html">&larr; What was left alone</a><span class="chapnav__mid"><a href="index.html">The archive</a></span><a href="statistics.html">Statistics &rarr;</a></nav>
+
+  </main>
+  <footer class="folio"><a href="index.html">The archive</a></footer>
+</div>
+</body>
+</html>

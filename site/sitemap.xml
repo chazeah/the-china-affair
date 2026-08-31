@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://example.com/archive/corrections.html</loc><priority>0.6</priority></url>
+  <url><loc>https://example.com/archive/evidence.html</loc><priority>0.6</priority></url>
+  <url><loc>https://example.com/archive/</loc><priority>0.6</priority></url>
+  <url><loc>https://example.com/archive/preserved-spellings.html</loc><priority>0.6</priority></url>
+  <url><loc>https://example.com/archive/statistics.html</loc><priority>0.6</priority></url>
+  <url><loc>https://example.com/archive/verification.html</loc><priority>0.6</priority></url>
+  <url><loc>https://example.com/</loc><priority>1.0</priority></url>
+  <url><loc>https://example.com/read/chapter-01.html</loc><priority>0.8</priority></url>
+  <url><loc>https://example.com/read/chapter-02.html</loc><priority>0.8</priority></url>
+  <url><loc>https://example.com/read/chapter-03.html</loc><priority>0.8</priority></url>
+  <url><loc>https://example.com/read/chapter-04.html</loc><priority>0.8</priority></url>
+  <url><loc>https://example.com/read/chapter-05.html</loc><priority>0.8</priority></url>
+  <url><loc>https://example.com/read/chapter-06.html</loc><priority>0.8</priority></url>
+  <url><loc>https://example.com/read/chapter-07.html</loc><priority>0.8</priority></url>
+  <url><loc>https://example.com/read/chapter-08.html</loc><priority>0.8</priority></url>
+  <url><loc>https://example.com/read/chapter-09.html</loc><priority>0.8</priority></url>
+  <url><loc>https://example.com/read/chapter-10.html</loc><priority>0.8</priority></url>
+  <url><loc>https://example.com/read/chapter-11.html</loc><priority>0.8</priority></url>
+  <url><loc>https://example.com/read/chapter-12.html</loc><priority>0.8</priority></url>
+  <url><loc>https://example.com/read/chapter-13.html</loc><priority>0.8</priority></url>
+  <url><loc>https://example.com/read/chapter-14.html</loc><priority>0.8</priority></url>
+  <url><loc>https://example.com/read/contents.html</loc><priority>0.8</priority></url>
+  <url><loc>https://example.com/read/prologue.html</loc><priority>0.8</priority></url>
+</urlset>

@@ -1,0 +1,619 @@
+/* ==========================================================================
+   The China Affair — a reading edition and transcription archive
+
+   The page furniture is taken from the typescript itself: every original page
+   carries the author's name and a revision mark ("2nd rev.") at the head, and
+   a hand-written folio number at the foot. The site repeats that structure, so
+   the chrome describes the source instead of decorating it.
+
+   Palette is the artifact's own: a cool grey typing stock rather than warm
+   cream, a soft grey-black where the ribbon struck cleanly, oxide red for the
+   ribbon's red half (used only for readings the scanner got wrong), and an
+   editor's pencil blue for anything the reader can act on.
+
+   No webfonts, no external requests of any kind. This is meant to keep
+   working, unchanged, on any host, for a long time.
+   ========================================================================== */
+
+:root {
+  --paper:      #efeee8;
+  --paper-sunk: #e5e4dc;
+  --ink:        #1c1b18;
+  --ribbon:     #4a4640;
+  --carbon:     #75705f;
+  --pencil:     #2f4858;
+  --strike:     #8c2f26;
+  --rule:       #c9c6ba;
+  --rule-faint: #dcd9cf;
+
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", "Segoe UI Mono",
+          "Liberation Mono", Menlo, Consolas, monospace;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+           "URW Palladio L", Georgia, serif;
+
+  --measure: 29.5em;
+  --step: 1.55rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper:      #17171a;
+    --paper-sunk: #1f1f23;
+    --ink:        #dcd8cd;
+    --ribbon:     #b0aa9c;
+    --carbon:     #8d8778;
+    --pencil:     #8fb4c8;
+    --strike:     #cc7a6a;
+    --rule:       #3a3a3f;
+    --rule-faint: #2b2b30;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1.1875rem/1.72 var(--serif);
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+}
+
+/* The carbon grain. Kept at a level you notice only if you look for it, and
+   removed entirely in dark mode where it muddies the text. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@media (prefers-color-scheme: dark) { body::before { display: none; } }
+
+/* ------------------------------------------------------------------ layout */
+
+.sheet {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 0 1.6rem 4rem;
+  position: relative;
+  z-index: 2;
+}
+.sheet--wide { max-width: 64rem; }
+
+/* Running head: author left, revision/section right, exactly as typed. */
+.runhead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 1.5rem 0 0.5rem;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 3rem;
+  font: 400 0.72rem/1 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--carbon);
+}
+.runhead a { color: inherit; text-decoration: none; }
+.runhead a:hover { color: var(--pencil); }
+.runhead__rev { font-style: normal; white-space: nowrap; }
+
+/* Folio: the hand-numbered page foot, in brackets, centred. */
+.folio {
+  margin: 3.5rem 0 0;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--rule-faint);
+  text-align: center;
+  font: 400 0.72rem/1 var(--mono);
+  letter-spacing: 0.18em;
+  color: var(--carbon);
+}
+.folio a { color: var(--pencil); }
+
+/* --------------------------------------------------------------- typography */
+
+h1, h2, h3, h4 {
+  font-family: var(--mono);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.title {
+  margin: 0 0 0.4rem;
+  font-size: clamp(1.7rem, 6.4vw, 2.9rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.byline {
+  margin: 0 0 2.6rem;
+  max-width: none;
+  font: 400 0.82rem/1.5 var(--mono);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--carbon);
+}
+
+/* A section label: the typescript's own vocabulary for structural markers. */
+.label {
+  margin: 0 0 1.1rem;
+  max-width: none;
+  font: 400 0.72rem/1.5 var(--mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--carbon);
+}
+
+/* Section headings on the archive's own pages, matching the converted reports
+   so the two kinds of page are indistinguishable to a reader. */
+main h2 {
+  margin: 2.9rem 0 1rem;
+  font-size: 0.86rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--rule);
+}
+main h3 {
+  margin: 2rem 0 0.7rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ribbon);
+}
+.cards h3, .chapter__title, .title { border: 0; padding: 0; }
+
+/* A section heading that should look like a label, not a rule. Used where the
+   label genuinely heads a section, so the heading order stays h1 > h2 > h3. */
+main h2.label {
+  margin: 0 0 1.1rem;
+  border: 0;
+  padding: 0;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  letter-spacing: 0.18em;
+  color: var(--carbon);
+}
+
+.lede {
+  max-width: var(--measure);
+  margin: 0 0 var(--step);
+  font-size: 1.28rem;
+  line-height: 1.62;
+}
+
+p { max-width: var(--measure); }
+
+a { color: var(--pencil); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-style: dotted; }
+
+:focus-visible {
+  outline: 2px solid var(--pencil);
+  outline-offset: 3px;
+}
+
+hr.rule {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: var(--step) 0;
+}
+
+/* --------------------------------------------------------- the thesis pair */
+
+/* Scan above, recovered text below, the same width and the same lines, so the
+   comparison needs no explanation and no interaction. */
+.thesis { margin: 0 0 var(--step); }
+.thesis picture { display: block; }
+.thesis__scan {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+  background: #fff;
+  filter: contrast(1.05);
+}
+/* In dark mode the scans are NOT inverted. The artifact is dark ink on pale
+   paper, and an inverted full page reads as a black void with a few faint
+   marks in it. They stay as plates, dimmed slightly so they sit in the page
+   rather than glaring out of it. */
+@media (prefers-color-scheme: dark) {
+  .thesis__scan { filter: brightness(0.88) contrast(1.02); }
+}
+/* On a narrow screen the scan is a tighter crop, taken far enough into the line
+   that it stops mid-word. Fading the cut edge says the line continues, rather
+   than looking like a rendering fault. */
+@media (max-width: 34rem) {
+  .thesis__scan {
+    border-right: 0;
+    -webkit-mask-image: linear-gradient(to right, #000 74%, transparent 99%);
+            mask-image: linear-gradient(to right, #000 74%, transparent 99%);
+  }
+}
+.thesis__arrow {
+  margin: 0.85rem 0 0.5rem;
+  font: 400 0.72rem/1 var(--mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--carbon);
+}
+.thesis__text {
+  margin: 0;
+  padding: 1.15rem 1.3rem;
+  background: var(--paper-sunk);
+  border-left: 2px solid var(--pencil);
+  max-width: none;
+}
+.thesis__caption {
+  margin: 0.9rem 0 0;
+  max-width: none;
+  font: 400 0.76rem/1.6 var(--mono);
+  color: var(--carbon);
+}
+
+/* ------------------------------------------------------------- the contents */
+
+.contents { margin: 0; padding: 0; list-style: none; }
+.contents li { border-bottom: 1px solid var(--rule-faint); }
+.contents a {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr auto;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.82rem 0;
+  text-decoration: none;
+  color: var(--ink);
+}
+.contents a:hover { background: var(--paper-sunk); }
+.contents a:hover .contents__title { color: var(--pencil); }
+.contents__num {
+  font: 400 0.74rem/1.5 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--carbon);
+}
+.contents__title { font-size: 1.06rem; }
+.contents__pages {
+  font: 400 0.72rem/1.5 var(--mono);
+  color: var(--carbon);
+  white-space: nowrap;
+}
+@media (max-width: 34rem) {
+  .contents a { grid-template-columns: 4.2rem 1fr; }
+  .contents__pages { display: none; }
+}
+
+/* ------------------------------------------------------------ chapter pages */
+
+.chapter__label {
+  margin: 0 0 0.7rem;
+  max-width: none;
+  text-align: center;
+  font-size: 0.86rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--carbon);
+}
+.chapter__title {
+  margin: 0 0 2.8rem;
+  text-align: center;
+  font-size: clamp(1.15rem, 3.6vw, 1.5rem);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+/* The typescript separates paragraphs by a first-line indent and nothing else.
+   Keeping that, rather than adding inter-paragraph space, is how the document
+   actually reads. The opening paragraph of a chapter takes no indent. */
+.prose p {
+  margin: 0;
+  text-indent: 1.6em;
+  hyphens: auto;
+}
+.prose > p:first-of-type { text-indent: 0; }
+.prose p + .quote, .prose p + .verse { margin-top: 1.1rem; }
+.prose .quote + p, .prose .verse + p { margin-top: 1.1rem; }
+
+.quote {
+  margin: 1.1rem 0;
+  padding: 0 0 0 1.6rem;
+  border-left: 1px solid var(--rule);
+  font-size: 1.06rem;
+  line-height: 1.6;
+  text-indent: 0;
+  color: var(--ribbon);
+}
+.verse {
+  margin: 1.3rem 0;
+  text-align: center;
+  font-size: 1.02rem;
+  line-height: 1.85;
+  text-indent: 0;
+  color: var(--ribbon);
+}
+
+sup.fnref { font-size: 0.68em; line-height: 0; }
+sup.fnref a { text-decoration: none; padding: 0 0.1em; }
+sup.fnref a:hover { text-decoration: underline; }
+
+/* The original's footnote rule is short — about an inch — not full width. */
+.footnotes {
+  margin: 3rem 0 0;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--ink);
+  border-image: linear-gradient(to right, var(--ink) 0 6.5rem, transparent 6.5rem) 1;
+}
+.footnotes ol { margin: 0; padding-left: 1.9rem; }
+.footnotes li {
+  margin-bottom: 0.7rem;
+  font-size: 0.95rem;
+  line-height: 1.58;
+  color: var(--ribbon);
+}
+.footnotes li p { max-width: none; margin: 0; text-indent: 0; }
+.footnotes a.backref { text-decoration: none; margin-left: 0.35em; }
+:target { background: var(--paper-sunk); }
+
+/* chapter-to-chapter navigation */
+.chapnav {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--rule-faint);
+  font: 400 0.76rem/1.5 var(--mono);
+  letter-spacing: 0.08em;
+}
+.chapnav a { text-decoration: none; }
+.chapnav a:hover { text-decoration: underline; }
+.chapnav span { color: var(--carbon); }
+.chapnav__mid { text-align: center; }
+
+/* ---------------------------------------------------------------- the facts */
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.5rem 1.6rem;
+  margin: 0 0 var(--step);
+  padding: 0;
+  list-style: none;
+}
+@media (max-width: 60rem) { .facts { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 34rem) { .facts { grid-template-columns: repeat(2, 1fr); } }
+.facts div { border-top: 1px solid var(--rule); padding-top: 0.7rem; }
+.facts dt {
+  font: 400 0.66rem/1.45 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--carbon);
+}
+.facts dd {
+  margin: 0.4rem 0 0;
+  font: 400 1.5rem/1.15 var(--mono);
+  letter-spacing: 0;
+}
+.facts dd small {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: var(--serif);
+  font-size: 0.84rem;
+  line-height: 1.45;
+  letter-spacing: 0;
+  color: var(--ribbon);
+}
+
+/* --------------------------------------------------------------- card links */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1px;
+  margin: 0 0 var(--step);
+  background: var(--rule-faint);
+  border: 1px solid var(--rule-faint);
+}
+.cards a {
+  display: block;
+  padding: 1.25rem 1.35rem;
+  background: var(--paper);
+  text-decoration: none;
+  color: var(--ink);
+}
+.cards a:hover { background: var(--paper-sunk); }
+.cards h3 {
+  margin: 0 0 0.45rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.cards p {
+  margin: 0;
+  max-width: none;
+  font-size: 0.94rem;
+  line-height: 1.55;
+  color: var(--ribbon);
+}
+
+/* The book leads. Its two entries are set larger and marked with the editor's
+   pencil, so the reading edition reads as the point and the archive as support. */
+.cards--lead a {
+  padding: 1.7rem 1.6rem;
+  border-left: 2px solid var(--pencil);
+}
+.cards--lead h3 { font-size: 0.95rem; margin-bottom: 0.6rem; }
+.cards--lead p { font-size: 1.04rem; line-height: 1.6; color: var(--ink); }
+
+/* -------------------------------------------------------------- data tables */
+
+.tablewrap { overflow-x: auto; margin: 0 0 var(--step); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font: 400 0.9rem/1.5 var(--mono);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.6rem 0.9rem 0.6rem 0;
+  border-bottom: 1px solid var(--rule-faint);
+}
+th {
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--carbon);
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+}
+td code, td kbd { font-family: var(--mono); font-size: 0.92em; }
+
+/* Corrections read as a diff, because that is what they are. Red is the
+   typewriter ribbon's other half, so it belongs to this document. */
+.was {
+  color: var(--strike);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+.now { color: var(--ink); }
+.pages { color: var(--carbon); font-size: 0.85em; white-space: nowrap; }
+
+/* prose tables inside converted reports */
+.report table { font-size: 0.88rem; }
+.report h2 {
+  margin: 2.8rem 0 1rem;
+  font-size: 0.86rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--rule);
+}
+.report h3 {
+  margin: 2rem 0 0.7rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ribbon);
+}
+.report p, .report li { max-width: var(--measure); }
+.report li { margin-bottom: 0.5rem; }
+.report code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: var(--paper-sunk);
+  padding: 0.08em 0.3em;
+}
+.report strong { font-weight: 400; color: var(--ink); background: none; }
+.report blockquote {
+  margin: var(--step) 0;
+  padding-left: 1.5rem;
+  border-left: 1px solid var(--rule);
+  color: var(--ribbon);
+}
+.report hr { border: 0; border-top: 1px solid var(--rule); margin: 2.4rem 0; }
+
+/* ------------------------------------------------------------ evidence plate */
+
+.plate { margin: 0 0 2.6rem; }
+.plate img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+  background: #fff;
+}
+@media (prefers-color-scheme: dark) {
+  .plate img { filter: brightness(0.88) contrast(1.02); }
+}
+.plate figcaption {
+  margin-top: 0.7rem;
+  font: 400 0.76rem/1.6 var(--mono);
+  color: var(--carbon);
+}
+.plate figcaption b { color: var(--ink); font-weight: 400; }
+
+details.evidence { margin: 0.4rem 0 0; }
+details.evidence > summary {
+  cursor: pointer;
+  font: 400 0.7rem/1 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pencil);
+  padding: 0.25rem 0;
+}
+details.evidence > summary::marker { color: var(--carbon); }
+details.evidence img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0.7rem 0 0.3rem;
+  border: 1px solid var(--rule);
+  background: #fff;
+}
+@media (prefers-color-scheme: dark) {
+  details.evidence img { filter: brightness(0.88) contrast(1.02); }
+}
+
+/* ---------------------------------------------------------------- searching */
+
+.search { margin: 0 0 var(--step); }
+.search input {
+  width: 100%;
+  max-width: 26rem;
+  padding: 0.65rem 0.8rem;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  font: 400 0.95rem/1.4 var(--mono);
+}
+.search input::placeholder { color: var(--carbon); }
+.search input:focus-visible { border-color: var(--pencil); }
+#results { margin: 1.2rem 0 0; padding: 0; list-style: none; }
+#results li { padding: 0.75rem 0; border-bottom: 1px solid var(--rule-faint); }
+#results a { text-decoration: none; font: 400 0.72rem/1 var(--mono);
+             letter-spacing: 0.12em; text-transform: uppercase; }
+#results p { margin: 0.4rem 0 0; max-width: none; font-size: 0.98rem; line-height: 1.55; }
+#results mark { background: transparent; color: var(--strike); font-weight: 400; }
+.search__note { font: 400 0.76rem/1.5 var(--mono); color: var(--carbon); }
+
+/* ------------------------------------------------------------------ utility */
+
+.skip {
+  position: absolute;
+  left: -9999px;
+}
+.skip:focus {
+  left: 1rem; top: 1rem;
+  z-index: 10;
+  padding: 0.6rem 0.9rem;
+  background: var(--paper);
+  border: 1px solid var(--pencil);
+  font: 400 0.8rem var(--mono);
+}
+
+.note {
+  max-width: var(--measure);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ribbon);
+}
+.stack > * + * { margin-top: var(--step); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+@media print {
+  body::before, .runhead, .chapnav, .search { display: none; }
+  body { background: #fff; color: #000; font-size: 11pt; }
+  a { color: #000; }
+}

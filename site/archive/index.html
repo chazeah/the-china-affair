@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The archive &amp;middot; The China Affair</title>
+  <meta name="description" content="How a 267-page scanned typescript was turned into a clean text: the method, the corrections and the evidence.">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="sheet">
+  <header class="runhead">
+    <a href="../index.html">Walton &middot; The China Affair</a>
+    <span class="runhead__rev">The archive</span>
+  </header>
+  <main id="main">
+    <p class="label">The archive</p>
+    <h1 class="title" style="font-size:clamp(1.4rem,4.8vw,2.2rem)">How this text was made</h1>
+
+    <div class="stack">
+      <p class="lede">The scan has no text layer. It is a photograph of paper, so
+        every word in this edition was recovered from pixels. The hard part was
+        not reading the characters &mdash; a good engine manages about 95% on this
+        typescript &mdash; but recovering the <em>structure</em>: where paragraphs
+        begin, which text is a footnote, which is a quotation, and which marks on
+        the page are not text at all.</p>
+
+      <p>Almost all of that came from geometry. The machine reading gives a
+        bounding box and a confidence score for every word, and the typewriter&rsquo;s
+        own habits do the rest.</p>
+    </div>
+
+    <div class="tablewrap"><table>
+      <thead><tr><th>What was measured</th><th>What it identifies</th></tr></thead>
+      <tbody>
+        <tr><td>Line begins at the left margin</td><td>body text continuing</td></tr>
+        <tr><td>Line begins 150&ndash;280&nbsp;px in</td><td>the first line of a new paragraph</td></tr>
+        <tr><td>Indented, and the block is narrower than the body</td><td>a quotation</td></tr>
+        <tr><td>Lines about 100&nbsp;px apart</td><td>double-spaced body text</td></tr>
+        <tr><td>Lines about 50&nbsp;px apart</td><td>a single-spaced footnote or quotation</td></tr>
+        <tr><td>A solid horizontal run of dark pixels, low on the page</td><td>the footnote separator rule</td></tr>
+        <tr><td>Centred, short, near the top of a page</td><td>a chapter heading</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Two things that look obvious and are not</h2>
+
+    <p>The paragraph indent is <strong>not a constant</strong>. It ranges from
+      about 150&nbsp;px to 276&nbsp;px depending on which revision typed the page,
+      so no fixed threshold can separate a paragraph opening from a quotation.
+      What does separate them is width: a quoted block is narrower than the body
+      measure. Below, a normal paragraph on scan page 60 indents further than most
+      quotations do.</p>
+
+    <figure class="plate">
+      <img src="../assets/img/evidence/p060-paragraph-indent-is-276px.png"
+           alt="Two lines of typescript; the paragraph's first line is indented
+                noticeably further than a standard indent.">
+      <figcaption><b>Scan page 60.</b> An ordinary paragraph, indented
+        276&nbsp;px &mdash; deeper than some of the book&rsquo;s quotations.</figcaption>
+    </figure>
+
+    <p>And <strong>line spacing does not identify footnotes</strong>, because block
+      quotations and verse are single-spaced too. The reliable marker is the
+      separator rule, found by scanning the pixels directly rather than by asking
+      the text recogniser about it. That rule was detected on 30 pages. It is
+      also short &mdash; about an inch, not the full measure &mdash; and it sits so
+      close to the first note line that their bounding boxes overlap, which is why
+      splitting strictly below it leaked footnotes into the body.</p>
+
+    <figure class="plate">
+      <img src="../assets/img/evidence/p019-rule-touches-first-note-line.png"
+           alt="A short horizontal rule almost touching the first line of a footnote.">
+      <figcaption><b>Scan page 19.</b> The rule nearly touches
+        &ldquo;*There is a story extant&hellip;&rdquo; below it.</figcaption>
+    </figure>
+
+    <p>One linguistic rule turned out to matter as much as any of the geometric
+      ones: <strong>a new paragraph can only follow a completed sentence</strong>.
+      On faint pages the machine sometimes captures only the right-hand part of a
+      line, so its left edge looks like an indent; that test rejects the false
+      paragraph breaks this produces.</p>
+
+    <hr class="rule">
+
+    <p class="label">Read the workings</p>
+    <div class="cards">
+      <a href="corrections.html">
+        <h3>Corrections</h3>
+        <p>All 254 changes, grouped by kind of error, with the page each was
+           made on and a crop where one settled the question.</p>
+      </a>
+      <a href="preserved-spellings.html">
+        <h3>What was left alone</h3>
+        <p>&ldquo;occured&rdquo;, &ldquo;socalled&rdquo;, &ldquo;mililtary&rdquo;,
+           &ldquo;43 degress F.&rdquo; &mdash; the author&rsquo;s, not the
+           scanner&rsquo;s, and why that distinction was drawn where it was.</p>
+      </a>
+      <a href="verification.html">
+        <h3>Verification</h3>
+        <p>A coverage test run backwards from the source, to catch text that
+           disappeared without leaving a mark in the output. It found three real
+           bugs.</p>
+      </a>
+      <a href="statistics.html">
+        <h3>Statistics</h3>
+        <p>Source, machine reading, reconstructed structure and finished document,
+           in figures.</p>
+      </a>
+      <a href="evidence.html">
+        <h3>Evidence</h3>
+        <p>The page images that settled a specific question, each tied to the
+           decision it supports.</p>
+      </a>
+    </div>
+
+    <hr class="rule">
+
+    <p class="label">Reproducing it</p>
+    <p class="note">The full working archive &mdash; the pipeline scripts, the two
+      hand-built input files, the reconstructed manuscript as JSON, and every
+      evidence crop &mdash; sits alongside this site. Two files are the human
+      input to the whole process: <code>overrides.json</code>, the pages retyped
+      by hand, and <code>fixes.json</code>, the verified corrections. Everything
+      else regenerates from the scan.</p>
+
+    <nav class="chapnav">
+      <a href="../index.html">&larr; Front matter</a>
+      <span class="chapnav__mid"><a href="../read/contents.html">Read the book</a></span>
+      <a href="corrections.html">Corrections &rarr;</a>
+    </nav>
+
+  </main>
+  <footer class="folio"><a href="../index.html">Back to the front</a></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,6 @@
+# The China Affair — a reading edition and transcription archive
+User-agent: *
+Allow: /
+
+# Replace example.com with your domain before publishing.
+Sitemap: https://example.com/sitemap.xml
