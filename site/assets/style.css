@@ -421,14 +421,16 @@ sup.fnref a:hover { text-decoration: underline; }
   background: var(--rule-faint);
   border: 1px solid var(--rule-faint);
 }
-.cards a {
+/* Only the card itself is a card. Anchors nested deeper — the inline links in
+   the listen card — keep ordinary link styling. */
+.cards > a, .cards > div {
   display: block;
   padding: 1.25rem 1.35rem;
   background: var(--paper);
   text-decoration: none;
   color: var(--ink);
 }
-.cards a:hover { background: var(--paper-sunk); }
+.cards > a:hover { background: var(--paper-sunk); }
 .cards h3 {
   margin: 0 0 0.45rem;
   font-size: 0.82rem;
@@ -443,14 +445,39 @@ sup.fnref a:hover { text-decoration: underline; }
   color: var(--ribbon);
 }
 
-/* The book leads. Its two entries are set larger and marked with the editor's
+/* The cover sits inside the download card, at the width of a spine rather than
+   a plate, so it reads as the object being offered and not as decoration. */
+.card__cover {
+  display: block;
+  width: 100%;
+  max-width: 14rem;
+  height: auto;
+  margin: 0 auto 1rem;
+  border: 1px solid var(--rule);
+  box-shadow: 0 0.35rem 1rem rgb(0 0 0 / 18%);
+}
+@media (prefers-color-scheme: dark) {
+  .card__cover { filter: brightness(0.9); }
+}
+
+/* The book leads. Its entries are set larger and marked with the editor's
    pencil, so the reading edition reads as the point and the archive as support. */
-.cards--lead a {
+.cards--lead > a, .cards--lead > div {
   padding: 1.7rem 1.6rem;
   border-left: 2px solid var(--pencil);
 }
 .cards--lead h3 { font-size: 0.95rem; margin-bottom: 0.6rem; }
 .cards--lead p { font-size: 1.04rem; line-height: 1.6; color: var(--ink); }
+
+/* The book row is two columns, not a wrapping track: the cover makes the
+   download card tall, so it holds the left column while read and listen stack
+   down the right. */
+.cards--book { grid-template-columns: 4fr 6fr; }
+.cards--book > :first-child { grid-row: span 2; }
+@media (max-width: 40rem) {
+  .cards--book { grid-template-columns: 1fr; }
+  .cards--book > :first-child { grid-row: auto; }
+}
 
 /* -------------------------------------------------------------- data tables */
 
@@ -563,28 +590,6 @@ details.evidence img {
   details.evidence img { filter: brightness(0.88) contrast(1.02); }
 }
 
-/* ---------------------------------------------------------------- searching */
-
-.search { margin: 0 0 var(--step); }
-.search input {
-  width: 100%;
-  max-width: 26rem;
-  padding: 0.65rem 0.8rem;
-  background: var(--paper);
-  color: var(--ink);
-  border: 1px solid var(--rule);
-  font: 400 0.95rem/1.4 var(--mono);
-}
-.search input::placeholder { color: var(--carbon); }
-.search input:focus-visible { border-color: var(--pencil); }
-#results { margin: 1.2rem 0 0; padding: 0; list-style: none; }
-#results li { padding: 0.75rem 0; border-bottom: 1px solid var(--rule-faint); }
-#results a { text-decoration: none; font: 400 0.72rem/1 var(--mono);
-             letter-spacing: 0.12em; text-transform: uppercase; }
-#results p { margin: 0.4rem 0 0; max-width: none; font-size: 0.98rem; line-height: 1.55; }
-#results mark { background: transparent; color: var(--strike); font-weight: 400; }
-.search__note { font: 400 0.76rem/1.5 var(--mono); color: var(--carbon); }
-
 /* ------------------------------------------------------------------ utility */
 
 .skip {
@@ -613,7 +618,7 @@ details.evidence img {
 }
 
 @media print {
-  body::before, .runhead, .chapnav, .search { display: none; }
+  body::before, .runhead, .chapnav { display: none; }
   body { background: #fff; color: #000; font-size: 11pt; }
   a { color: #000; }
 }

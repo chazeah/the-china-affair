@@ -27,6 +27,4 @@ From the repository root, run:
 python3 -m http.server 8000 --directory site
 ```
 
-Then open <http://localhost:8000/>. Serving over HTTP also enables the book's
-full-text search, which browsers block when the HTML is opened directly from
-disk.
+Then open <http://localhost:8000/>.
